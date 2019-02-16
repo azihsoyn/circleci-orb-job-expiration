@@ -1,0 +1,58 @@
+description: Set and Check expiration
+
+usage:
+  version: 2.1
+  orbs:
+    slack: circleci/slack@1.0.0
+    expiration: azihsoyn/job-expiration@0.1.0
+
+  jobs:
+    build:
+      steps:
+        - run:
+            name: build
+            command: |
+              echo "build"
+    send-approval-link:
+      steps:
+        - slack/notify:
+            message: |
+              Please check and approve Job to deploy.
+              https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}
+        - expiration/set:
+            ttl: 600
+
+    deploy:
+      steps:
+        - expiration/check:
+        - run:
+            name: deploy
+            command: |
+              echo "deploy"
+  workflows:
+    version: 2
+    example-workflow:
+      jobs:
+        - build:
+            filters:
+              branches:
+                only: master
+        - send-approval-link:
+            requires:
+              - build
+            filters:
+              branches:
+                only: master
+        - pending-approval:
+            type: approval
+            requires:
+              - send-approval-link
+            filters:
+              branches:
+                only: master
+        - deploy:
+            requires:
+              - pending-approval
+            filters:
+              branches:
+                only: master
