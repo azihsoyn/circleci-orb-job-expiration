@@ -8,12 +8,16 @@ usage:
 
   jobs:
     build:
+      docker:
+        - image: <docker image>
       steps:
         - run:
             name: build
             command: |
               echo "build"
     send-approval-link:
+      docker:
+        - image: <docker image>
       steps:
         - slack/notify:
             message: |
@@ -23,8 +27,10 @@ usage:
             ttl: 600
 
     deploy:
+      docker:
+        - image: <docker image>
       steps:
-        - expiration/check:
+        - expiration/check
         - run:
             name: deploy
             command: |
