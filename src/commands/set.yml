@@ -11,7 +11,11 @@ steps:
       name: job-expiration save expire time
       shell: /bin/bash
       command: |
-        expr $(date +%s) + << parameters.mentions >> > .expiration
+        if (( << parameters.ttl >> != 0 )); then
+          expr $(date +%s) + << parameters.ttl >> > .expiration;
+        else
+          echo 0 > .expiration
+        fi
   - save_cache:
       key: azihsoyn/job-expiration-cache-{{ .Branch }}-{{ .Environment.CIRCLE_WORKFLOW_ID }}
       paths:

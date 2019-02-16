@@ -10,4 +10,4 @@ steps:
       name: job-expiration check expiration
       shell: /bin/bash
       command: |
-        if (( `expr $(date +%s)` < `cat .expiration` )); then echo "ok"; else echo "expired."; exit 1; fi;
+        if (( `cat .expiration` == 0 || `expr $(date +%s)` < `cat .expiration` )); then echo "ok"; else echo "expired."; exit 1; fi;
