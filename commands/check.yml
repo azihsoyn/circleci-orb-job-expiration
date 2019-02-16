@@ -1,0 +1,13 @@
+description: Check expiration job
+
+steps:
+  - restore_cache:
+      keys:
+          - azihsoyn/job-expiration-cache-{{ .Branch }}-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      paths:
+          - .expiration
+  - run:
+      name: job-expiration check expiration
+      shell: /bin/bash
+      command: |
+        if (( `expr $(date +%s)` < `cat .expiration` )); then echo "ok"; else echo "expired."; exit 1; fi;

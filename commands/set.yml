@@ -1,0 +1,18 @@
+description: Set expiration time for job
+
+parameters:
+  ttl:
+    description: Time to live when job expire in seconds. If 0 set, no expire.
+    type: integer
+    default: 0
+
+steps:
+  - run:
+      name: job-expiration save expire time
+      shell: /bin/bash
+      command: |
+        expr $(date +%s) + << parameters.mentions >> > .expiration
+  - save_cache:
+      key: azihsoyn/job-expiration-cache-{{ .Branch }}-{{ .Environment.CIRCLE_WORKFLOW_ID }}
+      paths:
+        - .expiration
