@@ -1,2 +1,2 @@
-# circleci-orbs-job-expiration
-CircleCI Orbs to set job expiration
+# circleci-orb-job-expiration
+CircleCI Orb to set job expiration
