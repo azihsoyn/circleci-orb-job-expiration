@@ -16,7 +16,7 @@ jobs:
     docker:
       - image: <docker image>
     steps:
-      - expiration/set
+      - expiration/set:
           ttl: 600
       - expiration/check
 ```
